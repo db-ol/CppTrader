@@ -82,6 +82,12 @@ public:
     */
     const Order* GetOrder(uint64_t id) const noexcept;
 
+    //! Test Github Actinos
+    /*!
+        \param dummy_symbol - Dummy symbol to test Github Actions
+        \return Dummy error code to test Github Actions
+    */
+    ErrorCode TestAction(const Symbol&  dummy_symbol );
     //! Add a new symbol
     /*!
         \param symbol - Symbol to add

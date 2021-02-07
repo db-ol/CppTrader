@@ -33,6 +33,32 @@ MarketManager::~MarketManager()
     _symbols.clear();
 }
 
+ErrorCode MarketManager::TestAction(const Symbol& symbol)
+{
+    int test_action;
+
+    // Resize the symbol container
+       if (_symbols.size() <= symbol.Id)                        _symbols.resize(symbol.Id + 1, nullptr);
+
+    // Create a new symbol
+    Symbol* symbol_ptr = _symbol_pool.Create(symbol);
+
+    // Insert the symbol
+    assert((_symbols[symbol.Id] == nullptr) && "Duplicate symbol detected!");
+    if (_symbols[symbol.Id] != nullptr)
+    {
+    // Release the symbol
+    _symbol_pool.Release(symbol_ptr);
+    return ErrorCode::SYMBOL_DUPLICATE;
+    }
+    _symbols[symbol.Id] = symbol_ptr;
+
+    // Call the corresponding handler
+        _market_handler.onAddSymbol(*symbol_ptr);
+
+    return ErrorCode::OK;
+}
+
 ErrorCode MarketManager::AddSymbol(const Symbol& symbol)
 {
     // Resize the symbol container
